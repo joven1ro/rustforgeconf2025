@@ -70,6 +70,15 @@ For resource-constrained applications, real-time systems, or maximum performance
 
 Simple LED control using esp-hal:
 
+**Create the project:**
+```bash
+esp-generate --chip esp32c3 example-blink
+```
+When prompted:
+- Under "Flashing, logging and debugging (espflash)": select "use defmt to print messages"
+- Select "esp-backtrace" as the panic handler
+- Optional editor integration: select "zed" or "vscode"
+
 ### Key Components
 
 1. **Add the import:**
@@ -132,6 +141,15 @@ fn main() -> ! {
 ## Button Input Example
 
 Reading button input to control the LED:
+
+**Create the project:**
+```bash
+esp-generate --chip esp32c3 example-button
+```
+When prompted:
+- Under "Flashing, logging and debugging (espflash)": select "use defmt to print messages"
+- Select "esp-backtrace" as the panic handler
+- Optional editor integration: select "zed" or "vscode"
 
 ### Key Components
 
