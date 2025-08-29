@@ -209,6 +209,104 @@ fn main() -> ! {
 }
 ```
 
+## RGB LED Example
+
+Making the RGB LED do RGB LED things.
+
+## Key Components
+
+1. Add the smartLED and RMT LED crates to your `Cargo.toml` (with a patch line to get the latest git version for `esp-hal-smartled`).
+
+```toml
+smart-leds-trait = { version = "0.3" }
+smart-leds = "0.4"
+esp-hal-smartled = { version = "0.16.0", features = [ "esp32c3" ], default-features = false}
+
+
+[patch.crates-io]
+esp-hal-smartled = { git = "https://github.com/esp-rs/esp-hal-community", branch = "main" }
+```
+
+2. Add the prerequisite imports to `src/bin/main.rs`
+```rust
+use esp_hal_smartled::{smart_led_buffer, SmartLedsAdapter};
+use smart_leds::{SmartLedsWrite as _, hsv::{hsv2rgb, Hsv}};
+```
+
+3. Set up the RMT peripheral and LED
+```rust
+let mut led = {
+   let frequency = Rate::from_mhz(80);
+   let rmt = Rmt::new(p.RMT, frequency).expect("Failed to initialize RMT0");
+   SmartLedsAdapter::new(rmt.channel0, p.GPIO2, smart_led_buffer!(1))
+};
+```
+
+4. Cycle through LED hues
+```rust
+let mut hue = 0u8;
+loop {
+   let pixels = [hsv2rgb(Hsv {
+      hue,
+      sat: 255,
+      val: 8,
+   })];
+
+   led.write(pixels).unwrap();
+
+   hue = hue.wrapping_add(10);
+
+   let delay_start = Instant::now();
+   while delay_start.elapsed() < Duration::from_millis(100) {}
+}
+```
+
+## Complete example
+
+```rust
+#![no_std]
+#![no_main]
+
+use esp_hal::{clock::CpuClock, main, rmt::Rmt, time::{Duration, Instant, Rate}};
+use esp_hal_smartled::{smart_led_buffer, SmartLedsAdapter};
+use smart_leds::{SmartLedsWrite as _, hsv::{hsv2rgb, Hsv}};
+
+esp_bootloader_esp_idf::esp_app_desc!();
+
+#[main]
+fn main() -> ! {
+    let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
+    let p = esp_hal::init(config);
+
+    let mut led = {
+        let frequency = Rate::from_mhz(80);
+        let rmt = Rmt::new(p.RMT, frequency).expect("Failed to initialize RMT0");
+        SmartLedsAdapter::new(rmt.channel0, p.GPIO2, smart_led_buffer!(1))
+    };
+
+    let mut hue = 0u8;
+    loop {
+        let pixels = [hsv2rgb(Hsv {
+            hue,
+            sat: 255,
+            val: 8,
+        })];
+
+        led.write(pixels).unwrap();
+
+        hue = hue.wrapping_add(10);
+
+        let delay_start = Instant::now();
+        while delay_start.elapsed() < Duration::from_millis(100) {}
+    }
+}
+
+#[panic_handler]
+fn panic(_: &core::panic::PanicInfo) -> ! {
+    loop {}
+}
+```
+
 ## Useful Resources
 
 - [ESP-RS Board Documentation](https://docs.esp-rs.org/esp-rust-board/)
