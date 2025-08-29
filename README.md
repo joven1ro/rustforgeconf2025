@@ -129,6 +129,68 @@ fn main() -> ! {
 }
 ```
 
+## Button Input Example
+
+Reading button input to control the LED:
+
+### Key Components
+
+1. **Add the input import:**
+   ```rust
+   use esp_hal::gpio::{Input, InputConfig, Level, Output, OutputConfig};
+   ```
+
+2. **Set up the button input:**
+   ```rust
+   let button = Input::new(peripherals.GPIO9, InputConfig::default());
+   ```
+
+3. **Read button state in loop:**
+   ```rust
+   if button.is_high() {
+       led.set_high();
+   } else {
+       led.set_low();
+   }
+   ```
+
+### Complete Example
+
+```rust
+#![no_std]
+#![no_main]
+
+use defmt::info;
+use esp_hal::clock::CpuClock;
+use esp_hal::gpio::{Input, InputConfig, Level, Output, OutputConfig};
+use esp_hal::main;
+use esp_hal::time::{Duration, Instant};
+use {esp_backtrace as _, esp_println as _};
+
+esp_bootloader_esp_idf::esp_app_desc!();
+
+#[main]
+fn main() -> ! {
+    let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
+    let peripherals = esp_hal::init(config);
+
+    // Set GPIO7 as an output, and set its state high initially.
+    let mut led = Output::new(peripherals.GPIO7, Level::Low, OutputConfig::default());
+    let button = Input::new(peripherals.GPIO9, InputConfig::default());
+
+    info!("Hello world!");
+
+    // Check the button state and set the LED state accordingly.
+    loop {
+        if button.is_high() {
+            led.set_high();
+        } else {
+            led.set_low();
+        }
+    }
+}
+```
+
 ## Useful Resources
 
 - [ESP-RS Board Documentation](https://docs.esp-rs.org/esp-rust-board/)
