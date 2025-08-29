@@ -45,8 +45,16 @@ For resource-constrained applications, real-time systems, or maximum performance
 
 1. **Setup:**
    ```bash
+   cargo install esp-generate cargo-espflash espflash
    rustup toolchain install --component rust-src
    rustup target add riscv32imc-unknown-none-elf
+   ```
+
+   **Optional: Install probe-rs for advanced debugging:**
+   ```bash
+   # See https://probe.rs/docs/getting-started/installation/ for full instructions
+   # See https://github.com/cargo-bins/cargo-binstall for cargobinstall
+   cargo binstall probe-rs-tools
    ```
 
 2. **Optional: try the training examples:**
