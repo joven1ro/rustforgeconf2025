@@ -64,7 +64,7 @@ For resource-constrained applications, real-time systems, or maximum performance
 1. **Setup:**
    ```bash
    cargo install esp-generate cargo-espflash espflash
-   rustup toolchain install stable --component rust-src
+   # rustup toolchain install stable --component rust-src --perhaps not required
    rustup target add riscv32imc-unknown-none-elf
    ```
 
