@@ -8,7 +8,7 @@ Getting started with Rust development on the ESP-RS development board at RustFor
    ```bash
    # Install rustup if you don't have it
    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-   
+
    # Update to latest stable (ensure 1.86+)
    rustup update stable
    rustup default stable
@@ -64,7 +64,7 @@ For resource-constrained applications, real-time systems, or maximum performance
 1. **Setup:**
    ```bash
    cargo install esp-generate cargo-espflash espflash
-   rustup toolchain install --component rust-src
+   rustup toolchain install stable --component rust-src
    rustup target add riscv32imc-unknown-none-elf
    ```
 
