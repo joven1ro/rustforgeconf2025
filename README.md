@@ -2,6 +2,18 @@
 
 Getting started with Rust development on the ESP-RS development board at RustForgeConf 2025.
 
+## Prerequisites
+
+1. **Install/Update Rust (minimum version 1.86):**
+   ```bash
+   # Install rustup if you don't have it
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   
+   # Update to latest stable (ensure 1.86+)
+   rustup update stable
+   rustup default stable
+   ```
+
 ## Choosing std vs no_std
 
 **Use std when you need:**
