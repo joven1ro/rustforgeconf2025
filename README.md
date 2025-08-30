@@ -14,6 +14,12 @@ Getting started with Rust development on the ESP-RS development board at RustFor
    rustup default stable
    ```
 
+2. **Linux users: Add yourself to the dialout group:**
+   ```bash
+   sudo usermod -a -G dialout $USER
+   # Log out and back in for changes to take effect
+   ```
+
 ## Choosing std vs no_std
 
 **Use std when you need:**
